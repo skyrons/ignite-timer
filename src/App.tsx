@@ -12,12 +12,8 @@ function App() {
         <Button variant={"danger"}/>
         <Button variant={"primary"}/>
         <Button variant={"secondary"}/>
-
-        a
-    
         <GlobalStyle />
 
-   
       </ThemeProvider>
     </div>
   ) 
