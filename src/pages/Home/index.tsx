@@ -19,14 +19,26 @@ const newCicleFormValidationSchema = zod.object({
     minutesAmount: zod.number().min(5).max(60)
 })
 
+// interface NewCycleFormData {
+//     task: string,
+//     minutesAmount: number,
+// }
+
+type NewCycleFormData = zod.infer<typeof newCicleFormValidationSchema>
+
+
 export function Home(){
 
-    const { register, handleSubmit, watch, formState } = useForm(  {
+    const { register, handleSubmit, watch, formState } = useForm<NewCycleFormData>({
         resolver: zodResolver(newCicleFormValidationSchema),
-    }   );
+        defaultValues: {
+            task: '',
+            minutesAmount: 0,
+        },
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function handleCreateNewCycle(data: any){
+    function handleCreateNewCycle(data: NewCycleFormData){
         console.log(data);
     }
 
