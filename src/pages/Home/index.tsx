@@ -13,21 +13,26 @@ import {
     StartCountButton, 
     TaskInput 
 } from "./styles";
+import { useState } from 'react';
 
 const newCicleFormValidationSchema = zod.object({
     task: zod.string().min(1),
     minutesAmount: zod.number().min(5).max(60)
 })
 
-// interface NewCycleFormData {
-//     task: string,
-//     minutesAmount: number,
-// }
+interface Cycle {
+    id: string,
+    task: string,
+    minutesAmount: number,
+}
 
 type NewCycleFormData = zod.infer<typeof newCicleFormValidationSchema>
 
 
 export function Home(){
+
+    const [cycles, setCycles] = useState<Cycle[]>([]);
+    const [activeCycleId, setActiveCycleId] = useState<string | null>(null);
 
     const { register, handleSubmit, watch, formState, reset } = useForm<NewCycleFormData>({
         resolver: zodResolver(newCicleFormValidationSchema),
@@ -37,13 +42,24 @@ export function Home(){
         },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleCreateNewCycle(data: NewCycleFormData){
-        console.log(data);
+        const id = String(new Date().getTime());
+        const newCycle: Cycle = {
+            id: id,
+            task: data.task,
+            minutesAmount: data.minutesAmount,
+        }
+        setActiveCycleId(id);
+        setCycles((state) => [...state, newCycle])
+
         reset()
     }
 
-    console.log(formState.errors);
+    const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
+
+    console.log(activeCycle)
+
+    // console.log(formState.errors);
 
     const task = watch('task');
     const isSubmitDisabled = !task;
