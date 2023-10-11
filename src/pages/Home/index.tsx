@@ -29,7 +29,7 @@ type NewCycleFormData = zod.infer<typeof newCicleFormValidationSchema>
 
 export function Home(){
 
-    const { register, handleSubmit, watch, formState } = useForm<NewCycleFormData>({
+    const { register, handleSubmit, watch, formState, reset } = useForm<NewCycleFormData>({
         resolver: zodResolver(newCicleFormValidationSchema),
         defaultValues: {
             task: '',
@@ -40,6 +40,7 @@ export function Home(){
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function handleCreateNewCycle(data: NewCycleFormData){
         console.log(data);
+        reset()
     }
 
     console.log(formState.errors);
