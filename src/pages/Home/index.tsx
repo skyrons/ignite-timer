@@ -48,12 +48,20 @@ export function Home(){
     const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
     useEffect(() => {
+
+        let interval: number 
+
         if (activeCycle) {
-            setInterval(() => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            interval = setInterval(() => {
                 setAmountSecondsPassed(
                     differenceInSeconds(new Date(), activeCycle.startDate)
                 )
             })
+            
+            return () => {
+                clearInterval(interval)
+            }
         }
     }, [activeCycle])
 
@@ -67,6 +75,7 @@ export function Home(){
         }
         setActiveCycleId(id);
         setCycles((state) => [...state, newCycle])
+        setAmountSecondsPassed(0)
 
         reset()
     }
@@ -81,6 +90,12 @@ export function Home(){
 
     const minutes = String(minutesCountAtual).padStart(2, '0');
     const seconds = String(secondsCountAtual).padStart(2, '0');
+
+    useEffect(() => {
+        if(activeCycle){
+            document.title = `${minutes}:${seconds}`
+        }
+    }, [minutes, seconds, activeCycle])
 
     // console.log(formState.errors);
 
