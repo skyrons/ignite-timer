@@ -27,6 +27,7 @@ interface Cycle {
     task: string,
     minutesAmount: number,
     startDate: Date,
+    interruptedDate?: Date,
 }
 
 type NewCycleFormData = zod.infer<typeof newCicleFormValidationSchema>
@@ -81,7 +82,19 @@ export function Home(){
         reset()
     }
 
-    console.log(activeCycle)
+    function handleInterruptCycle(){
+        setCycles(
+            cycles.map((cycle) => {
+                if(cycle.id === activeCycleId){
+                    return { ...cycle, interruptedDate: new Date() }
+                }else {
+                    return cycle
+                }
+            }),
+        )
+
+        setActiveCycleId(null)
+    }
 
     const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
     const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0;
@@ -102,6 +115,8 @@ export function Home(){
 
     const task = watch('task');
     const isSubmitDisabled = !task;
+
+    console.log(cycles)
 
 
     return(
@@ -147,7 +162,7 @@ export function Home(){
                 </CountdownContainer>
 
                 {activeCycle ? (
-                    <StopCountButton type="button">
+                    <StopCountButton onClick={handleInterruptCycle} type="button">
                         <HandPalm size={24} />
                         Interromper
                     </StopCountButton>
