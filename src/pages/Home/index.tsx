@@ -114,6 +114,7 @@ export function Home(){
                         id="task"
                         list='task-suggestion'
                         {...register("task")}
+                        disabled={!!activeCycle}
                         />
 
                     <datalist id="task-suggestion">
@@ -131,6 +132,7 @@ export function Home(){
                         min={5}
                         // max={60}612
                         {...register('minutesAmount', { valueAsNumber: true })}
+                        disabled={!!activeCycle}
                         />
                     <span>minutos</span>
                 </FormContainer>
